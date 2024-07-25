@@ -1,16 +1,14 @@
 package com.navdeep.billsplitter.repository;
 
+import com.navdeep.billsplitter.entity.GroupDetail;
 import com.navdeep.billsplitter.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UsersRepository extends JpaRepository<Users, Long> {
-
-    Optional<Users> findByUsername(String username);
-
-    Optional<Users> findById(UUID userId);
+public interface GroupDetailRepository extends JpaRepository<GroupDetail, UUID> {
+    List<GroupDetail> findByCreatedBy(Users createdBy);
 }

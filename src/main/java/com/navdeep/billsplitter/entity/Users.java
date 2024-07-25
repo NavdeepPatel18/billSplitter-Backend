@@ -43,6 +43,9 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+//    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<GroupDetail> groupDetails;
+
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
