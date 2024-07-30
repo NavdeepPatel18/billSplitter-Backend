@@ -1,6 +1,5 @@
 package com.navdeep.billsplitter.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,25 +15,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class GroupDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @UuidGenerator(style = UuidGenerator.Style.TIME)
-    private UUID groupId;
-    @Column(nullable = false)
-    private String groupName;
-    private String groupDescription;
+public class GroupMember {
 
-    @Enumerated(EnumType.STRING)
-    private GroupType groupType;
-    private String groupStatus;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @UuidGenerator(style = UuidGenerator.Style.TIME)
+//    private UUID id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false,name="created_by")
-    @JsonIgnore
-    private Users createdBy;
+    @EmbeddedId
+    private GroupUserId id;
 
-    @Column(nullable = false, updatable = false)
+//    @JoinColumn(name = "user_id")
+//    @ManyToOne
+//    private Users user_id;
+//
+//    @JoinColumn(name = "group_id")
+//    @ManyToOne
+//    private GroupDetail group_id;
+
+    @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime updatedAt;
