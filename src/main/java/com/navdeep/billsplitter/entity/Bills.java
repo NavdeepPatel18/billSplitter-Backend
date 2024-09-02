@@ -1,7 +1,5 @@
 package com.navdeep.billsplitter.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,30 +17,34 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class GroupDetail {
+public class Bills {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @UuidGenerator(style = UuidGenerator.Style.TIME)
-    private UUID groupId;
+    private UUID id;
+    private String title;
+    private String description;
     @Column(nullable = false)
-    private String groupName;
-    private String groupDescription;
+    private int amount;
+    private Date date;
 
-    @Enumerated(EnumType.STRING)
-    private GroupType groupType;
-    private String groupStatus;
+
+    @OneToOne
+    private Users addedBy;
 
     @ManyToOne
-    @JoinColumn(nullable = false,name="created_by")
-    @JsonIgnore
-    private Users createdBy;
+    @JoinColumn(name = "group_id")
+    private GroupDetail groupDetail;
 
-    @OneToMany(mappedBy = "id.groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference
-    private List<GroupMember> groupMembers;
+    // Many users can be associated with a single bill
+    @ManyToMany
+    @JoinTable(
+            name = "bill_users",
+            joinColumns = @JoinColumn(name = "bill_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<Users> users;
 
-    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.ALL)
-    private List<Bills> bills;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -59,4 +62,5 @@ public class GroupDetail {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
 }
