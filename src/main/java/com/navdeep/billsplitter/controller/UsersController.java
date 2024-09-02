@@ -1,5 +1,6 @@
 package com.navdeep.billsplitter.controller;
 
+import com.navdeep.billsplitter.dto.GroupListDTO;
 import com.navdeep.billsplitter.dto.GroupMemberRequest;
 import com.navdeep.billsplitter.entity.GroupDetail;
 import com.navdeep.billsplitter.service.GroupDetailService;
@@ -24,10 +25,10 @@ public class UsersController {
 
 
     @GetMapping("/groups")
-    public ResponseEntity<List<GroupDetail>> groupList(){
+    public ResponseEntity<List<GroupListDTO>> groupList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return ResponseEntity.ok(groupDetailService.groupList(username));
+        return ResponseEntity.ok(groupDetailService.getGroups(username));
     }
 
     @GetMapping("/groups/{group}/members")

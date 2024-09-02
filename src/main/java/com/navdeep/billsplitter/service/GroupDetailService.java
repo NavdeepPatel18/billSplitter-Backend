@@ -1,6 +1,7 @@
 package com.navdeep.billsplitter.service;
 
 import com.navdeep.billsplitter.dto.GroupDetailRequest;
+import com.navdeep.billsplitter.dto.GroupListDTO;
 import com.navdeep.billsplitter.entity.*;
 import com.navdeep.billsplitter.repository.GroupDetailRepository;
 import com.navdeep.billsplitter.repository.GroupMemberRepository;
@@ -57,13 +58,42 @@ public class GroupDetailService {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Group is not created");
     }
 
-    public List<GroupDetail> groupList(String username){
+//    public List<GroupDetail> groupList(String username){
+//        Users user = usersRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException(username));
+//
+//        return groupMemberRepository.findByIdUserId(user)
+//                .stream()
+//                .map(group -> group.getId().getGroupId())
+//                .collect(Collectors.toList());
+//    }
+
+    public List<GroupListDTO> getGroups(String username) {
+        // Find user by username
         Users user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return groupMemberRepository.findByIdUserId(user)
-                .stream()
-                .map(group -> group.getId().getGroupId())
+        List<GroupMember> groupMembers = groupMemberRepository.findByIdUserId(user);
+
+        return groupMembers.stream()
+                .map(member -> {
+                    GroupDetail groupDetail = member.getId().getGroupId();
+                    List<String> memberNames = groupDetail.getGroupMembers().stream()
+                            .map(m -> m.getId().getUserId().getUsername())
+                            .collect(Collectors.toList());
+
+                    return new GroupListDTO(
+                            groupDetail.getGroupId(),
+                            groupDetail.getGroupName(),
+                            groupDetail.getGroupDescription(),
+                            groupDetail.getGroupStatus(),
+                            groupDetail.getGroupType().name(),
+                            groupDetail.getCreatedBy().getUsername(),
+                            memberNames,
+                            groupDetail.getCreatedAt(),
+                            groupDetail.getUpdatedAt()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
