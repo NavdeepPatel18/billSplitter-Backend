@@ -2,6 +2,7 @@ package com.navdeep.billsplitter.controller;
 
 import com.navdeep.billsplitter.dto.BillsRequestDTO;
 import com.navdeep.billsplitter.dto.GroupMemberRequest;
+import com.navdeep.billsplitter.entity.Bills;
 import com.navdeep.billsplitter.entity.GroupDetail;
 import com.navdeep.billsplitter.service.BillsService;
 import com.navdeep.billsplitter.service.GroupDetailService;
@@ -50,5 +51,10 @@ public class UsersController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return billsService.saveBill(billsRequestDTO,username);
+    }
+
+    @GetMapping("/bills/{id}")
+    public ResponseEntity<Bills> getBillById(@PathVariable UUID id){
+        return billsService.getBillById(id);
     }
 }

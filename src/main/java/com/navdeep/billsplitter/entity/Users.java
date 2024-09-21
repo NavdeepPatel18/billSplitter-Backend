@@ -46,6 +46,9 @@ public class Users implements UserDetails {
 //    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<GroupDetail> groupDetails;
 
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<BillSplit> billSplits; // Updated to use BillSplit entity
+
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 

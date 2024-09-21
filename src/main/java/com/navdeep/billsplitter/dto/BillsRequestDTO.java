@@ -22,5 +22,5 @@ public class BillsRequestDTO {
 
     @JsonbDateFormat("yyyy-MM-dd")
     private Date billDate;
-    private List<String> members;
+    private List<BillSplitRequestDTO> members;
 }
