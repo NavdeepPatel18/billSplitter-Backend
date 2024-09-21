@@ -19,9 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+
 @Service
 @RequiredArgsConstructor
 public class BillsService {
+
 
     private final BillsRepository billsRepository;
     private final UsersRepository usersRepository;
@@ -78,7 +80,5 @@ public class BillsService {
         Optional<Bills> bill = billsRepository.findById(id);
         return bill.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
-
-
 
 }

@@ -26,6 +26,7 @@ public class Bills {
     private String description;
     @Column(nullable = false)
     private int amount;
+
     private Date billDate;
 
     @OneToOne
@@ -38,6 +39,7 @@ public class Bills {
     @JoinColumn(name = "group_id")
     private GroupDetail groupDetail;
 
+  
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BillSplit> billSplits; // Updated to use BillSplit entity
 
@@ -58,4 +60,5 @@ public class Bills {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
 }

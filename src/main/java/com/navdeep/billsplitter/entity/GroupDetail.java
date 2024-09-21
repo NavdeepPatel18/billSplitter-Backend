@@ -1,6 +1,7 @@
 package com.navdeep.billsplitter.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -33,6 +35,13 @@ public class GroupDetail {
     @JoinColumn(nullable = false,name="created_by")
     @JsonIgnore
     private Users createdBy;
+
+    @OneToMany(mappedBy = "id.groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonManagedReference
+    private List<GroupMember> groupMembers;
+
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.ALL)
+    private List<Bills> bills;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
