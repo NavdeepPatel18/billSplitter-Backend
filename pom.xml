@@ -73,7 +73,14 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 		</dependency>
-        <dependency>
+		<!-- https://mvnrepository.com/artifact/jakarta.json.bind/jakarta.json.bind-api -->
+		<dependency>
+			<groupId>jakarta.json.bind</groupId>
+			<artifactId>jakarta.json.bind-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>

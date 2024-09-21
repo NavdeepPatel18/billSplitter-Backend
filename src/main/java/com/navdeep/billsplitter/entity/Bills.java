@@ -26,24 +26,22 @@ public class Bills {
     private String description;
     @Column(nullable = false)
     private int amount;
-    private Date date;
 
+    private Date billDate;
 
     @OneToOne
     private Users addedBy;
+
+    @OneToOne
+    private Users paidBy;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
     private GroupDetail groupDetail;
 
-    // Many users can be associated with a single bill
-    @ManyToMany
-    @JoinTable(
-            name = "bill_users",
-            joinColumns = @JoinColumn(name = "bill_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<Users> users;
+  
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BillSplit> billSplits; // Updated to use BillSplit entity
 
 
     @Column(nullable = false, updatable = false)
