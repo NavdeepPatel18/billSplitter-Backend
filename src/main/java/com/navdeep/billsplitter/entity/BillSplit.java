@@ -20,11 +20,11 @@ public class BillSplit {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bill_id", nullable = false)
+    @JoinColumn(name = "billId", nullable = false)
     private Bills bill;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private Users user;
 
 

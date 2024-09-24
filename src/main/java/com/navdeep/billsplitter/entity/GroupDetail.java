@@ -1,7 +1,6 @@
 package com.navdeep.billsplitter.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,16 +30,15 @@ public class GroupDetail {
     private GroupType groupType;
     private String groupStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false,name="created_by")
     @JsonIgnore
     private Users createdBy;
 
-    @OneToMany(mappedBy = "id.groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference
+    @OneToMany(mappedBy = "id.groupId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<GroupMember> groupMembers;
 
-    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Bills> bills;
 
     @Column(nullable = false, updatable = false)

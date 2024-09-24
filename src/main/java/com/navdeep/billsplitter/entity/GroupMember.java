@@ -18,24 +18,8 @@ import java.util.UUID;
 @Entity
 public class GroupMember {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @UuidGenerator(style = UuidGenerator.Style.TIME)
-//    private UUID id;
-
     @EmbeddedId
     private GroupUserId id;
-
-//    @ManyToOne
-//    @MapsId("userId")  // Maps the userId attribute of GroupUserId to Users entity
-//    @JoinColumn(name = "user_id")
-//    private Users user;
-//
-//    @ManyToOne
-//    @MapsId("groupId")  // Maps the groupId attribute of GroupUserId to GroupDetail entity
-//    @JoinColumn(name = "group_id")
-////    @JsonBackReference
-//    private GroupDetail groupDetail;
 
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;

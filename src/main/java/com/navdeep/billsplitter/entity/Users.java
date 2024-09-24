@@ -43,14 +43,15 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     private List<GroupDetail> groupDetails;
 
-    @OneToOne(mappedBy = "addedBy")
-    private Bills bills;
+    @OneToMany(mappedBy = "id.userId", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<GroupMember> groupMember;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
-    private List<BillSplit> billSplits; // Updated to use BillSplit entity
+    @OneToMany(mappedBy = "user",orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BillSplit> billSplits;
+
 
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;

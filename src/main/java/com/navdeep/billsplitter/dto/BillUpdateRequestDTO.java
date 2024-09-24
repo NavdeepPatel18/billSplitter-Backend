@@ -14,8 +14,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BillsRequestDTO {
-    private UUID groupId;
+public class BillUpdateRequestDTO {
+
+    private UUID billId;
     private String title;
     private String description;
     private int amount;
@@ -23,5 +24,6 @@ public class BillsRequestDTO {
 
     @JsonbDateFormat("yyyy-MM-dd")
     private Date billDate;
-    private List<BillSplitRequestDTO> members;
+    private List<BillSplitRequestDTO> splitMembers;
+
 }

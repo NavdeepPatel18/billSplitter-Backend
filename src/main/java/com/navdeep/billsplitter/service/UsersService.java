@@ -4,6 +4,7 @@ import com.navdeep.billsplitter.auth.AuthenticationRequest;
 import com.navdeep.billsplitter.auth.AuthenticationResponse;
 import com.navdeep.billsplitter.auth.RegisterRequest;
 import com.navdeep.billsplitter.config.JwtService;
+import com.navdeep.billsplitter.dto.UserDTO;
 import com.navdeep.billsplitter.entity.Role;
 import com.navdeep.billsplitter.entity.Users;
 import com.navdeep.billsplitter.repository.UsersRepository;
@@ -15,7 +16,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import static com.navdeep.billsplitter.dto.UserDTO.getUserDTO;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -25,15 +29,6 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public List<Users> getAllUsers() {
-        return usersRepository.findAll();
-    }
-
-    public void addUser(Users user) {
-        System.out.println(user);
-        usersRepository.save(user);
-    }
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Users.builder()
@@ -66,4 +61,51 @@ public class UsersService {
                 .token(jwtToken)
                 .build();
     }
+
+
+
+    public UserDTO getUserByUsername(String username) {
+        Users user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return getUserDTO(user);
+    }
+
+
+
+    public UserDTO updateUserByUsername(String username, UserDTO userDTO) {
+
+        var user = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        if(!Objects.equals(user.getUsername(), userDTO.getUsername()) && usersRepository.existsByUsername(user.getUsername())) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        if(!Objects.equals(user.getEmail(), userDTO.getEmail()) && usersRepository.existsByEmail(user.getEmail())) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        if(!Objects.equals(user.getPhone(), userDTO.getPhone()) && usersRepository.existsByPhone(user.getPhone())) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        try {
+            user.setUsername(userDTO.getUsername());
+            user.setEmail(userDTO.getEmail());
+            user.setFirstname(userDTO.getFirstname());
+            user.setLastname(userDTO.getLastname());
+            user.setPhone(userDTO.getPhone());
+            user.setUpdatedAt(LocalDateTime.now());
+
+            Users updatedUser  = usersRepository.save(user);
+
+            return getUserDTO(updatedUser);
+        }catch (Exception e) {
+            throw new UsernameNotFoundException(username);
+        }
+
+    }
+
+
 }
