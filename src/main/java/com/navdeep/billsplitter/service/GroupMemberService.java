@@ -1,5 +1,6 @@
 package com.navdeep.billsplitter.service;
 
+import com.navdeep.billsplitter.dto.GroupMemberDTO;
 import com.navdeep.billsplitter.dto.GroupMemberRequest;
 import com.navdeep.billsplitter.entity.GroupDetail;
 import com.navdeep.billsplitter.entity.GroupMember;
@@ -8,9 +9,13 @@ import com.navdeep.billsplitter.entity.Users;
 import com.navdeep.billsplitter.repository.GroupDetailRepository;
 import com.navdeep.billsplitter.repository.GroupMemberRepository;
 import com.navdeep.billsplitter.repository.UsersRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +24,7 @@ public class GroupMemberService {
     private final UsersRepository usersRepository;
     private final GroupDetailRepository groupDetailRepository;
 
-    public ResponseEntity<String> addGroupMember(GroupMemberRequest groupMemberRequest) {
+    public List<GroupMemberDTO> addGroupMember(GroupMemberRequest groupMemberRequest) {
         GroupDetail groupDetail = groupDetailRepository.findById(groupMemberRequest.getGroupDetail())
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
@@ -38,6 +43,25 @@ public class GroupMemberService {
             groupMemberRepository.save(groupMember);
         }
 
-        return ResponseEntity.ok("Successfully added group member");
+        return getAllGroupMembers(groupDetail.getGroupId());
+    }
+
+    public List<GroupMemberDTO> getAllGroupMembers(@NonNull UUID groupId) {
+        GroupDetail groupDetail = groupDetailRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        List<GroupMember> memberList = groupMemberRepository.findByIdGroupId(groupDetail);
+
+        return memberList.stream()
+                .map(
+                        groupMember -> {
+                            return GroupMemberDTO.builder()
+                                    .groupId(groupMember.getId().getGroupId().getGroupId())
+                                    .userId(groupMember.getId().getUserId().getId())
+                                    .userName(groupMember.getId().getUserId().getUsername())
+                                    .build();
+                        }
+                )
+                .collect(Collectors.toList());
     }
 }

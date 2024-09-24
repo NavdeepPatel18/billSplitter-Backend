@@ -19,6 +19,7 @@ public class BillsRequestDTO {
     private String title;
     private String description;
     private int amount;
+    private String paidBy;
 
     @JsonbDateFormat("yyyy-MM-dd")
     private Date billDate;

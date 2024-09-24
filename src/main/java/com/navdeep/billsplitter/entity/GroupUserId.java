@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,12 +19,15 @@ import java.util.Objects;
 @AllArgsConstructor
 public class GroupUserId implements Serializable {
 
-    @JoinColumn(name = "user_id")
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private Users userId;
 
-    @JoinColumn(name = "group_id")
     @ManyToOne
+    @JoinColumn(name = "group_id")
     private GroupDetail groupId;
 
     @Override
